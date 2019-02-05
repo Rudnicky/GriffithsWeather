@@ -95,8 +95,15 @@ public class WeatherActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    viewModel.setCityName(locator.getCity(this));
+
+                    // obtain current city
+                    this.currentCity = locator.getCity(this);
+
+                    // notify view-model and update ui
+                    viewModel.setCityName(this.currentCity);
+
+                    // perform weather web-service call
+                    viewModel.getWeatherData();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
