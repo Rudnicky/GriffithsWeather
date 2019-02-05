@@ -5,14 +5,17 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.example.griffithsweather.R;
+import com.example.griffithsweather.databinding.ActivityWeatherBinding;
 import com.example.griffithsweather.interfaces.ILocator;
 import com.example.griffithsweather.utilities.Locator;
 import com.example.griffithsweather.viewmodels.WeatherViewModel;
@@ -27,12 +30,18 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        setup();
+    }
 
-        // setting up view model
-        viewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+    private void setup() {
+        // setting up view-model with bindings
+        this.viewModel = new WeatherViewModel();
+        ActivityWeatherBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
+        binding.setViewmodel(viewModel);
+        binding.executePendingBindings();
 
-        // creates an instance of Locator within current context
-        locator = new Locator(this);
+        // creates an instance of Locator
+        locator = new Locator();
 
         // UI controllers such as activities and fragments are primarily intended to display UI data,
         // react to user actions, or handle operating system communication, such as permission requests,
@@ -68,7 +77,7 @@ public class WeatherActivity extends AppCompatActivity {
             }
         } else {
             // Permission has already been granted
-            viewModel.onCityNameObtained(locator.getCity());
+            viewModel.setCityName(locator.getCity(this));
         }
     }
 
@@ -82,7 +91,7 @@ public class WeatherActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    viewModel.onCityNameObtained(locator.getCity());
+                    viewModel.setCityName(locator.getCity(this));
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

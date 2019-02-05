@@ -1,6 +1,8 @@
 package com.example.griffithsweather.interfaces;
 
+import android.content.Context;
+
 public interface ILocator {
 
-    String getCity();
+    String getCity(Context context);
 }

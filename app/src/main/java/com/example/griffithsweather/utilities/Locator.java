@@ -17,32 +17,28 @@ import java.util.Locale;
 
 public class Locator implements ILocator {
 
-    private Context context;
-
-    public Locator(Context context) {
-        this.context = context;
-    }
-
     @Override
-    public String getCity() {
+    public String getCity(Context context) {
 
-        // check if permissions is granted
-        // if it's not returns null
-        LocationManager lm = (LocationManager) this.context.getSystemService(Context.LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            return null;
+        if (context != null) {
+            // check if permissions is granted
+            // if it's not returns null
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // Permission is not granted
+                return null;
+            }
+
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            // gets city by longitude and latitude
+            try {
+                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                return addresses.get(0).getLocality();
+            } catch (IOException e) {}
         }
-
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        // gets city by longitude and latitude
-        try {
-            Geocoder geocoder = new Geocoder(this.context, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            return addresses.get(0).getLocality();
-        } catch (IOException e) {}
 
         return null;
     }

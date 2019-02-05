@@ -1,20 +1,21 @@
 package com.example.griffithsweather.viewmodels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
-public class WeatherViewModel extends ViewModel {
+import com.example.griffithsweather.BR;
 
-    private MutableLiveData<String> cityName;
-    public MutableLiveData<String> getCityName() {
-        if (cityName == null) {
-            cityName = new MutableLiveData<String>();
-        }
-        return cityName;
+public class WeatherViewModel extends BaseObservable {
+
+    private String cityName;
+
+    @Bindable
+    public String getCityName() {
+        return this.cityName;
     }
 
-    public void onCityNameObtained(String cityName) {
-        
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+        notifyPropertyChanged(BR.cityName);
     }
 }
