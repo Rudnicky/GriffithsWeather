@@ -14,14 +14,14 @@
         android:background="@drawable/img_background">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/weatherImageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="110dp"
-            android:layout_marginLeft="110dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="200dp"
             android:layout_marginBottom="437dp"
-            android:src="@drawable/img_sun"
+            app:imageResource="@{viewmodel.weatherImageResource}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,8 +30,8 @@
             android:id="@+id/simpleDivider"
             android:layout_width="70dp"
             android:layout_height="1dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="39dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
@@ -40,18 +40,20 @@
             app:layout_constraintBottom_toTopOf="@+id/cityTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+            app:layout_constraintStart_toEndOf="@+id/weatherImageView"
+            app:layout_constraintTop_toTopOf="@+id/weatherImageView" />
 
         <TextView
             android:id="@+id/temperatureTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginBottom="2dp"
-            android:textSize="40dp"
             android:fontFamily="@font/railway"
-            android:textColor="@android:color/background_light"
             android:text="@{viewmodel.temperature}"
+            android:textColor="@android:color/background_light"
+            android:textSize="40dp"
             app:layout_constraintBottom_toTopOf="@+id/simpleDivider"
             app:layout_constraintStart_toStartOf="@+id/simpleDivider" />
 
@@ -59,37 +61,39 @@
             android:id="@+id/cityTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/railway"
-            android:textSize="14dp"
-            android:textColor="@android:color/background_light"
             android:text="@{viewmodel.cityName}"
+            android:textColor="@android:color/background_light"
+            android:textSize="14dp"
             app:layout_constraintStart_toStartOf="@+id/simpleDivider"
             app:layout_constraintTop_toBottomOf="@+id/simpleDivider" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/rainImageView"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp"
             android:src="@drawable/img_teardrop"
-            app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+            app:layout_constraintStart_toStartOf="@+id/horizontalDivider"
+            app:layout_constraintTop_toTopOf="@+id/windImageView" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/windImageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="28dp"
             android:layout_marginLeft="28dp"
             android:src="@drawable/img_wind"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+            app:layout_constraintStart_toEndOf="@+id/rainImageView"
+            app:layout_constraintTop_toTopOf="@+id/cloudImageView" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/cloudImageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="22dp"
@@ -97,52 +101,50 @@
             android:layout_marginBottom="80dp"
             android:src="@drawable/img_cloud"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/view"
-            app:layout_constraintStart_toEndOf="@+id/imageView3" />
+            app:layout_constraintEnd_toEndOf="@+id/horizontalDivider"
+            app:layout_constraintStart_toEndOf="@+id/windImageView" />
 
         <TextView
             android:id="@+id/teardropTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/railway"
-            android:text="12mm"
+            android:text="@{viewmodel.rain}"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/view"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintStart_toStartOf="@+id/horizontalDivider"
+            app:layout_constraintTop_toBottomOf="@+id/rainImageView" />
 
         <TextView
             android:id="@+id/windTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginLeft="14dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/railway"
-            android:text="14Mph"
+            android:text="@{viewmodel.wind}"
             android:textColor="@android:color/background_light"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/teardropTextView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/cloudImageView" />
 
         <TextView
             android:id="@+id/cloudTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginLeft="14dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="7dp"
             android:fontFamily="@font/railway"
-            android:text="40%"
+            android:text="@{viewmodel.clouds}"
             android:textColor="@android:color/background_light"
             app:layout_constraintStart_toEndOf="@+id/windTextView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/cloudImageView" />
 
         <View
-            android:id="@+id/view"
+            android:id="@+id/horizontalDivider"
             android:layout_width="140dp"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
@@ -150,23 +152,23 @@
             android:layout_marginRight="50dp"
             android:background="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/windImageView" />
 
 
         <View
-            android:id="@+id/view2"
+            android:id="@+id/verticalDividerLeft"
             android:layout_width="1dp"
             android:layout_height="30dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="@+id/teardropTextView"
-            app:layout_constraintStart_toEndOf="@+id/imageView" />
+            app:layout_constraintStart_toEndOf="@+id/rainImageView" />
 
 
         <View
-            android:id="@+id/view3"
+            android:id="@+id/verticalDividerRight"
             android:layout_width="1dp"
             android:layout_height="30dp"
             android:layout_marginStart="12dp"
@@ -174,7 +176,7 @@
             android:layout_marginBottom="8dp"
             android:background="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="@+id/cloudTextView"
-            app:layout_constraintStart_toEndOf="@+id/imageView3" />
+            app:layout_constraintStart_toEndOf="@+id/windImageView" />
 
         <TextView
             android:id="@+id/lastUpdateTextView"
@@ -185,7 +187,7 @@
             android:fontFamily="@font/railway"
             android:text="Last:"
             android:textColor="@android:color/background_light"
-            android:textSize="10sp"
+            android:textSize="11sp"
             app:layout_constraintEnd_toStartOf="@+id/dataTextView"
             app:layout_constraintTop_toTopOf="@+id/dataTextView" />
 
@@ -198,12 +200,12 @@
             android:fontFamily="@font/railway"
             android:text="@{viewmodel.lastUpdate}"
             android:textColor="@android:color/background_light"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+            android:textSize="11sp"
+            app:layout_constraintEnd_toStartOf="@+id/refreshImageView"
+            app:layout_constraintTop_toTopOf="@+id/refreshImageView" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/locationImageView"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginStart="4dp"
@@ -213,11 +215,12 @@
             app:layout_constraintTop_toTopOf="@+id/cityTextView" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/refreshImageView"
             android:layout_width="14dp"
             android:layout_height="14dp"
+            android:onClick="@{() -> viewmodel.onRefreshButtonClicked()}"
             android:src="@drawable/img_refresh"
-            app:layout_constraintEnd_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintEnd_toEndOf="@+id/locationImageView"
+            app:layout_constraintTop_toBottomOf="@+id/weatherImageView" />
     </android.support.constraint.ConstraintLayout>
 </layout>
