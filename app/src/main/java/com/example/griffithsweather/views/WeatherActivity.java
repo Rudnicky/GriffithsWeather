@@ -1,18 +1,14 @@
 package com.example.griffithsweather.views;
 
 import android.Manifest;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.databinding.ActivityWeatherBinding;
@@ -25,6 +21,7 @@ public class WeatherActivity extends AppCompatActivity {
     private static final int GPS_REQUEST_FINE_LOCATION_PERMISSION = 0;
     private WeatherViewModel viewModel;
     private ILocator locator;
+    private String currentCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +74,15 @@ public class WeatherActivity extends AppCompatActivity {
             }
         } else {
             // Permission has already been granted
-            viewModel.setCityName(locator.getCity(this));
+
+            // obtain current city
+            this.currentCity = locator.getCity(this);
+
+            // notify view-model and update ui
+            viewModel.setCityName(this.currentCity);
+
+            // perform weather web-service call
+            viewModel.getWeatherData();
         }
     }
 
