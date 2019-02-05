@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 <data>
+    <import type="android.view.View" />
     <variable
         name="viewmodel"
         type="com.example.griffithsweather.viewmodels.WeatherViewModel" />
@@ -36,6 +37,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             android:background="@android:color/background_light"
             app:layout_constraintBottom_toTopOf="@+id/cityTextView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,6 +81,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp"
             android:src="@drawable/img_teardrop"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="@+id/horizontalDivider"
             app:layout_constraintTop_toTopOf="@+id/windImageView" />
 
@@ -89,6 +92,7 @@
             android:layout_marginStart="28dp"
             android:layout_marginLeft="28dp"
             android:src="@drawable/img_wind"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toEndOf="@+id/rainImageView"
             app:layout_constraintTop_toTopOf="@+id/cloudImageView" />
 
@@ -100,6 +104,7 @@
             android:layout_marginLeft="22dp"
             android:layout_marginBottom="80dp"
             android:src="@drawable/img_cloud"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/horizontalDivider"
             app:layout_constraintStart_toEndOf="@+id/windImageView" />
@@ -150,6 +155,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             android:background="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/windImageView" />
@@ -162,6 +168,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="8dp"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             android:background="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="@+id/teardropTextView"
             app:layout_constraintStart_toEndOf="@+id/rainImageView" />
@@ -174,6 +181,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginBottom="8dp"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             android:background="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="@+id/cloudTextView"
             app:layout_constraintStart_toEndOf="@+id/windImageView" />
@@ -186,6 +194,7 @@
             android:layout_marginRight="2dp"
             android:fontFamily="@font/railway"
             android:text="Last:"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             android:textColor="@android:color/background_light"
             android:textSize="11sp"
             app:layout_constraintEnd_toStartOf="@+id/dataTextView"
@@ -211,6 +220,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:src="@drawable/img_location"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toEndOf="@+id/cityTextView"
             app:layout_constraintTop_toTopOf="@+id/cityTextView" />
 
@@ -220,6 +230,7 @@
             android:layout_height="14dp"
             android:onClick="@{() -> viewmodel.onRefreshButtonClicked()}"
             android:src="@drawable/img_refresh"
+            android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/locationImageView"
             app:layout_constraintTop_toBottomOf="@+id/weatherImageView" />
     </android.support.constraint.ConstraintLayout>

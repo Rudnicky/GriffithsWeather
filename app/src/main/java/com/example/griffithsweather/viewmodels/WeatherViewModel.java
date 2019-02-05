@@ -22,6 +22,7 @@ public class WeatherViewModel extends BaseObservable {
     private String rain;
     private String clouds;
     private String wind;
+    private boolean isLoaded;
     private int weatherImageResource;
     private DataManager dataManager;
 
@@ -64,6 +65,13 @@ public class WeatherViewModel extends BaseObservable {
     public void setWind(String wind) {
         this.wind = wind;
         notifyPropertyChanged(BR.wind);
+    }
+
+    @Bindable
+    public boolean getIsLoaded() { return this.isLoaded; }
+    public void setIsLoaded(boolean isLoaded) {
+        this.isLoaded = isLoaded;
+        notifyPropertyChanged(BR.isLoaded);
     }
 
     @Bindable
@@ -119,6 +127,9 @@ public class WeatherViewModel extends BaseObservable {
 
                 // set last updated data
                 updateDateTime();
+
+                // set visibility
+                setIsLoaded(true);
 
             } catch (JSONException e) {
                 e.printStackTrace();
