@@ -1,10 +1,11 @@
-package com.example.griffithsweather.activity;
+package com.example.griffithsweather.views;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -12,48 +13,52 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.griffithsweather.R;
-import com.example.griffithsweather.databinding.ActivityMainBinding;
-import com.example.griffithsweather.locator.ILocator;
-import com.example.griffithsweather.locator.Locator;
-import com.example.griffithsweather.viewmodel.MainActivityViewModel;
+import com.example.griffithsweather.interfaces.ILocator;
+import com.example.griffithsweather.utilities.Locator;
+import com.example.griffithsweather.viewmodels.WeatherViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class WeatherActivity extends AppCompatActivity {
 
     private static final int GPS_REQUEST_FINE_LOCATION_PERMISSION = 0;
-    private MainActivityViewModel viewModel;
+    private WeatherViewModel viewModel;
+    private ILocator locator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_weather);
 
-        // setting up view model with bindings
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setViewModel(viewModel);
+        // setting up view model
+        viewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
 
-        // check current permissions
+        // creates an instance of Locator within current context
+        locator = new Locator(this);
+
+        // UI controllers such as activities and fragments are primarily intended to display UI data,
+        // react to user actions, or handle operating system communication, such as permission requests,
+        // so as it shouldn't be placed on view-model side.
         checkPermissions();
     }
 
     private void checkPermissions() {
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
+        if (ContextCompat.checkSelfPermission(WeatherActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(WeatherActivity.this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(WeatherActivity.this);
                 builder.setMessage("Without the location permission I'm not able to find your City and get weather information. Are you sure, you don't want to grant permission?").setPositiveButton("Exit Application", dialogClickListener)
                         .setNegativeButton("Prompt Again", dialogClickListener).show();
             } else {
                 // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(MainActivity.this,
+                ActivityCompat.requestPermissions(WeatherActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         GPS_REQUEST_FINE_LOCATION_PERMISSION);
 
@@ -63,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             // Permission has already been granted
-            // do whatever you have to do.
-            ILocator locator = new Locator(MainActivity.this);
-            viewModel.findCurrentCity(locator);
+            viewModel.onCityNameObtained(locator.getCity());
         }
     }
 
@@ -79,8 +82,7 @@ public class MainActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    ILocator locator = new Locator(MainActivity.this);
-                    viewModel.findCurrentCity(locator);
+                    viewModel.onCityNameObtained(locator.getCity());
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case DialogInterface.BUTTON_NEGATIVE:
                     // 'Prompt Again' btn has been clicked
-                    ActivityCompat.requestPermissions(MainActivity.this,
+                    ActivityCompat.requestPermissions(WeatherActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             GPS_REQUEST_FINE_LOCATION_PERMISSION);
 

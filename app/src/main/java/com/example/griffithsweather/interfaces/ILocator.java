@@ -1,4 +1,4 @@
-package com.example.griffithsweather.locator;
+package com.example.griffithsweather.interfaces;
 
 public interface ILocator {
 
