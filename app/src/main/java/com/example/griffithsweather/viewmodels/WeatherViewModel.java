@@ -59,7 +59,7 @@ public class WeatherViewModel extends BaseObservable {
                 String temperature = converter.KelvinToCelsius(currentTemperature);
 
                 // notify ui through bindings
-                setTemperature(temperature);
+                setTemperature(temperature + (char) 0x00B0);
 
             } catch (JSONException e) {
                 e.printStackTrace();
