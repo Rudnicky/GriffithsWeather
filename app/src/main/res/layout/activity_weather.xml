@@ -66,5 +66,158 @@
             android:text="@{viewmodel.cityName}"
             app:layout_constraintStart_toStartOf="@+id/simpleDivider"
             app:layout_constraintTop_toBottomOf="@+id/simpleDivider" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/img_teardrop"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:src="@drawable/img_wind"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginBottom="80dp"
+            android:src="@drawable/img_cloud"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintStart_toEndOf="@+id/imageView3" />
+
+        <TextView
+            android:id="@+id/teardropTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/railway"
+            android:text="12mm"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/windTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/railway"
+            android:text="14Mph"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/teardropTextView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <TextView
+            android:id="@+id/cloudTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/railway"
+            android:text="40%"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toEndOf="@+id/windTextView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="140dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@android:color/background_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/background_light"
+            app:layout_constraintBottom_toBottomOf="@+id/teardropTextView"
+            app:layout_constraintStart_toEndOf="@+id/imageView" />
+
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/background_light"
+            app:layout_constraintBottom_toBottomOf="@+id/cloudTextView"
+            app:layout_constraintStart_toEndOf="@+id/imageView3" />
+
+        <TextView
+            android:id="@+id/lastUpdateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:fontFamily="@font/railway"
+            android:text="Last:"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toStartOf="@+id/dataTextView"
+            app:layout_constraintTop_toTopOf="@+id/dataTextView" />
+
+        <TextView
+            android:id="@+id/dataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:fontFamily="@font/railway"
+            android:text="@{viewmodel.lastUpdate}"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toStartOf="@+id/imageView6"
+            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/img_location"
+            app:layout_constraintStart_toEndOf="@+id/cityTextView"
+            app:layout_constraintTop_toTopOf="@+id/cityTextView" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/img_refresh"
+            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import com.example.griffithsweather.BR;
 import com.example.griffithsweather.converters.TemperatureConverter;
 import com.example.griffithsweather.models.Weather;
+import com.example.griffithsweather.utilities.DateManager;
 import com.example.griffithsweather.webservices.JSONWeatherParser;
 import com.example.griffithsweather.webservices.WeatherHttpClient;
 
@@ -18,6 +19,12 @@ public class WeatherViewModel extends BaseObservable {
 
     private String cityName;
     private String temperature;
+    private String lastUpdate;
+    private DateManager dateManager;
+
+    public WeatherViewModel() {
+        this.dateManager = new DateManager();
+    }
 
     @Bindable
     public String getCityName() {
@@ -35,6 +42,19 @@ public class WeatherViewModel extends BaseObservable {
     public void setTemperature(String temperature) {
         this.temperature = temperature;
         notifyPropertyChanged(BR.temperature);
+    }
+
+    @Bindable
+    public String getLastUpdate() {return this.lastUpdate; }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
+        notifyPropertyChanged(BR.lastUpdate);
+    }
+
+    public void updateDateTime() {
+        String currentData = this.dateManager.getCurrentDate();
+        setLastUpdate(currentData);
     }
 
     public void getWeatherData() {
@@ -60,6 +80,9 @@ public class WeatherViewModel extends BaseObservable {
 
                 // notify ui through bindings
                 setTemperature(temperature + (char) 0x00B0);
+
+                // set last updated data
+                updateDateTime();
 
             } catch (JSONException e) {
                 e.printStackTrace();
