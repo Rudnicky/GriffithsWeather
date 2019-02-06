@@ -3,24 +3,31 @@ package com.example.griffithsweather.views;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.databinding.ActivityWeatherBinding;
 import com.example.griffithsweather.interfaces.IDataManager;
 import com.example.griffithsweather.interfaces.ILocator;
+import com.example.griffithsweather.interfaces.IToastMessageListener;
 import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.utilities.Locator;
 import com.example.griffithsweather.viewmodels.WeatherViewModel;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.NetworkStatus;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends AppCompatActivity implements IToastMessageListener {
 
     private static final int GPS_REQUEST_FINE_LOCATION_PERMISSION = 0;
     private NetworkStatus networkStatus;
@@ -50,6 +57,20 @@ public class WeatherActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (viewModel != null) {
+            viewModel.removeToastMessageListener();
+        }
+        super.onDestroy();
+    }
+
+    @BindingAdapter({"toastMessage"})
+    public static void runMe(View view, String message) {
+        if (message != null)
+            Toast.makeText(view.getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     private void setup() {
 
         // creates dependencies
@@ -57,6 +78,7 @@ public class WeatherActivity extends AppCompatActivity {
         this.dataManager = new DataManager();
         this.viewModel = new WeatherViewModel(dataManager);
         this.viewModel.setIsProgressBarVisible(true);
+        this.viewModel.setToastMessageListener(this);
 
         // builds merlin which is external library
         // that observes internet connection and
@@ -86,8 +108,6 @@ public class WeatherActivity extends AppCompatActivity {
         });
 
         merlin.registerDisconnectable(() -> {
-            // TODO: think about what needs to be done here, when there's a working app
-            // TODO: and somehow we've lost internet connection in the middle of nowhere.
             this.viewModel.setIsSadCloudVisible(false);
             this.viewModel.setIsProgressBarVisible(false);
             this.viewModel.setIsNetworkAvailable(false);
@@ -206,4 +226,23 @@ public class WeatherActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void toastMessageInvoked(String message) {
+        setupToastMessage(message);
+    }
+
+    private void setupToastMessage(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.cloud_toast, findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
 }

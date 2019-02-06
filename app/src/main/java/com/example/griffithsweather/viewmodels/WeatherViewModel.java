@@ -8,6 +8,7 @@ import com.example.griffithsweather.BR;
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.converters.TemperatureConverter;
 import com.example.griffithsweather.interfaces.IDataManager;
+import com.example.griffithsweather.interfaces.IToastMessageListener;
 import com.example.griffithsweather.models.Weather;
 import com.example.griffithsweather.webservices.JSONWeatherParser;
 import com.example.griffithsweather.webservices.WeatherHttpClient;
@@ -16,6 +17,7 @@ import org.json.JSONException;
 
 public class WeatherViewModel extends BaseObservable {
 
+    private static final long MINIMUM_REFRESH_DELAY_MS = 1000;
     private String cityName;
     private String temperature;
     private String lastUpdate;
@@ -27,7 +29,9 @@ public class WeatherViewModel extends BaseObservable {
     private boolean isProgressBarVisible;
     private boolean isNetworkAvailable;
     private int weatherImageResource;
+    private long lastRefreshClick;
     private IDataManager dataManager;
+    private IToastMessageListener messageListener;
 
     public WeatherViewModel(IDataManager dataManager) {
         this.dataManager = dataManager;
@@ -123,13 +127,33 @@ public class WeatherViewModel extends BaseObservable {
     }
 
     public void onRefreshButtonClicked() {
-        if (isNetworkAvailable) {
-            setIsProgressBarVisible(true);
-            getWeatherData();
+        long lastClick = lastRefreshClick;
+        long now = System.currentTimeMillis();
+        lastRefreshClick = now;
+
+        if (now - lastClick < MINIMUM_REFRESH_DELAY_MS) {
+            // way to fast. Ignore it.
         } else {
-            // TODO: set the toast message that user needs to turn on the internet
-            // TODO: there's no need for sad cloud in it :D
+            if (isNetworkAvailable) {
+                setIsProgressBarVisible(true);
+                getWeatherData();
+                if (messageListener != null) {
+                    messageListener.toastMessageInvoked("Weather updated!");
+                }
+            } else {
+                if (messageListener != null) {
+                    messageListener.toastMessageInvoked("Please turn on your internet.");
+                }
+            }
         }
+    }
+
+    public void setToastMessageListener(IToastMessageListener listener) {
+        this.messageListener = listener;
+    }
+
+    public void removeToastMessageListener() {
+        this.messageListener = null;
     }
 
     private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
