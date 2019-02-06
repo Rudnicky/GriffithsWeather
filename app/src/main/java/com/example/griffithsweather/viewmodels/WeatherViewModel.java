@@ -23,7 +23,7 @@ public class WeatherViewModel extends BaseObservable {
     private String clouds;
     private String wind;
     private boolean isLoaded;
-    private boolean isInternetAvailable;
+    private boolean isSadCloudVisible;
     private boolean isProgressBarVisible;
     private boolean isNetworkAvailable;
     private int weatherImageResource;
@@ -78,10 +78,10 @@ public class WeatherViewModel extends BaseObservable {
     }
 
     @Bindable
-    public boolean getIsInternetAvailable() { return this.isInternetAvailable; }
-    public void setIsInternetAvailable(boolean isInternetAvailable) {
-        this.isInternetAvailable = isInternetAvailable;
-        notifyPropertyChanged(BR.isInternetAvailable);
+    public boolean getIsSadCloudVisible() { return this.isSadCloudVisible; }
+    public void setIsSadCloudVisible(boolean isSadCloudVisible) {
+        this.isSadCloudVisible = isSadCloudVisible;
+        notifyPropertyChanged(BR.isSadCloudVisible);
     }
 
     @Bindable

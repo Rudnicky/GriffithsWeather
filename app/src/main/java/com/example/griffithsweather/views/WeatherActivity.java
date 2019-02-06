@@ -77,8 +77,8 @@ public class WeatherActivity extends AppCompatActivity {
                 .build(this);
 
         merlin.registerConnectable(() -> {
-            if (networkStatus != null && networkStatus.isAvailable() && !isWeatherInitialized) {
-                this.viewModel.setIsInternetAvailable(false);
+            if (networkStatus != null && !isWeatherInitialized) {
+                this.viewModel.setIsSadCloudVisible(false);
                 checkPermissions();
                 this.isWeatherInitialized = true;
                 this.viewModel.setIsNetworkAvailable(true);
@@ -88,7 +88,7 @@ public class WeatherActivity extends AppCompatActivity {
         merlin.registerDisconnectable(() -> {
             // TODO: think about what needs to be done here, when there's a working app
             // TODO: and somehow we've lost internet connection in the middle of nowhere.
-            this.viewModel.setIsInternetAvailable(false);
+            this.viewModel.setIsSadCloudVisible(false);
             this.viewModel.setIsProgressBarVisible(false);
             this.viewModel.setIsNetworkAvailable(false);
             this.isWeatherInitialized = false;
@@ -103,13 +103,13 @@ public class WeatherActivity extends AppCompatActivity {
             // if it's available then start the whole process
             // disable sad cloud etc. and change flags
             if (networkStatus != null && networkStatus.isAvailable() && !isWeatherInitialized) {
-                this.viewModel.setIsInternetAvailable(false);
+                this.viewModel.setIsSadCloudVisible(false);
                 checkPermissions();
                 this.isWeatherInitialized = true;
                 this.viewModel.setIsNetworkAvailable(true);
             } else {
                 this.viewModel.setIsNetworkAvailable(false);
-                this.viewModel.setIsInternetAvailable(true);
+                this.viewModel.setIsSadCloudVisible(true);
                 this.viewModel.setIsProgressBarVisible(false);
                 this.isWeatherInitialized = false;
             }
