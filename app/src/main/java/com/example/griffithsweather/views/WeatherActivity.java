@@ -18,15 +18,18 @@ import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.utilities.Locator;
 import com.example.griffithsweather.viewmodels.WeatherViewModel;
 import com.novoda.merlin.Merlin;
+import com.novoda.merlin.NetworkStatus;
 
 public class WeatherActivity extends AppCompatActivity {
 
     private static final int GPS_REQUEST_FINE_LOCATION_PERMISSION = 0;
+    private NetworkStatus networkStatus;
     private WeatherViewModel viewModel;
     private ILocator locator;
     private IDataManager dataManager;
     private String currentCity;
     private Merlin merlin;
+    private boolean isWeatherInitialized;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,8 @@ public class WeatherActivity extends AppCompatActivity {
         // creates dependencies
         this.locator = new Locator();
         this.dataManager = new DataManager();
+        this.viewModel = new WeatherViewModel(dataManager);
+        this.viewModel.setIsProgressBarVisible(true);
 
         // builds merlin which is external library
         // that observes internet connection and
@@ -59,7 +64,6 @@ public class WeatherActivity extends AppCompatActivity {
         buildMerlin();
 
         // setting up view-model with bindings
-        this.viewModel = new WeatherViewModel(dataManager);
         ActivityWeatherBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
         binding.setViewmodel(viewModel);
         binding.executePendingBindings();
@@ -73,21 +77,41 @@ public class WeatherActivity extends AppCompatActivity {
                 .build(this);
 
         merlin.registerConnectable(() -> {
-            viewModel.setIsInternetAvailable(false);
-            checkPermissions();
+            if (networkStatus != null && networkStatus.isAvailable() && !isWeatherInitialized) {
+                this.viewModel.setIsInternetAvailable(false);
+                checkPermissions();
+                this.isWeatherInitialized = true;
+                this.viewModel.setIsNetworkAvailable(true);
+            }
         });
 
         merlin.registerDisconnectable(() -> {
             // TODO: think about what needs to be done here, when there's a working app
             // TODO: and somehow we've lost internet connection in the middle of nowhere.
+            this.viewModel.setIsInternetAvailable(false);
+            this.viewModel.setIsProgressBarVisible(false);
+            this.viewModel.setIsNetworkAvailable(false);
+            this.isWeatherInitialized = false;
         });
 
         merlin.registerBindable(networkStatus -> {
-            if (networkStatus.isAvailable()) {
-                viewModel.setIsInternetAvailable(false);
+
+            // get current networkStatus instance
+            this.networkStatus = networkStatus;
+
+            // check whenever internet is available or not
+            // if it's available then start the whole process
+            // disable sad cloud etc. and change flags
+            if (networkStatus != null && networkStatus.isAvailable() && !isWeatherInitialized) {
+                this.viewModel.setIsInternetAvailable(false);
                 checkPermissions();
+                this.isWeatherInitialized = true;
+                this.viewModel.setIsNetworkAvailable(true);
             } else {
-                viewModel.setIsInternetAvailable(true);
+                this.viewModel.setIsNetworkAvailable(false);
+                this.viewModel.setIsInternetAvailable(true);
+                this.viewModel.setIsProgressBarVisible(false);
+                this.isWeatherInitialized = false;
             }
         });
     }

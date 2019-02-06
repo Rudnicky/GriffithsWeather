@@ -9,7 +9,6 @@ import com.example.griffithsweather.R;
 import com.example.griffithsweather.converters.TemperatureConverter;
 import com.example.griffithsweather.interfaces.IDataManager;
 import com.example.griffithsweather.models.Weather;
-import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.webservices.JSONWeatherParser;
 import com.example.griffithsweather.webservices.WeatherHttpClient;
 
@@ -25,6 +24,8 @@ public class WeatherViewModel extends BaseObservable {
     private String wind;
     private boolean isLoaded;
     private boolean isInternetAvailable;
+    private boolean isProgressBarVisible;
+    private boolean isNetworkAvailable;
     private int weatherImageResource;
     private IDataManager dataManager;
 
@@ -84,6 +85,20 @@ public class WeatherViewModel extends BaseObservable {
     }
 
     @Bindable
+    public boolean getIsProgressBarVisible() { return this.isProgressBarVisible; }
+    public void setIsProgressBarVisible(boolean isProgressBarVisible) {
+        this.isProgressBarVisible = isProgressBarVisible;
+        notifyPropertyChanged(BR.isProgressBarVisible);
+    }
+
+    @Bindable
+    public boolean getIsNetworkAvailable() { return this.isNetworkAvailable; }
+    public void setIsNetworkAvailable(boolean isNetworkAvailable) {
+        this.isNetworkAvailable = isNetworkAvailable;
+        notifyPropertyChanged(BR.isNetworkAvailable);
+    }
+
+    @Bindable
     public int getWeatherImageResource() { return this.weatherImageResource; }
     public void setWeatherImageResource(int weatherImageResource) {
         this.weatherImageResource = weatherImageResource;
@@ -108,7 +123,13 @@ public class WeatherViewModel extends BaseObservable {
     }
 
     public void onRefreshButtonClicked() {
-        getWeatherData();
+        if (isNetworkAvailable) {
+            setIsProgressBarVisible(true);
+            getWeatherData();
+        } else {
+            // TODO: set the toast message that user needs to turn on the internet
+            // TODO: there's no need for sad cloud in it :D
+        }
     }
 
     private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
@@ -145,6 +166,12 @@ public class WeatherViewModel extends BaseObservable {
                 e.printStackTrace();
             }
             return weather;
+        }
+
+        @Override
+        protected void onPostExecute(Weather weather) {
+            super.onPostExecute(weather);
+            setIsProgressBarVisible(false);
         }
     }
 
