@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.example.griffithsweather.BR;
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.converters.TemperatureConverter;
+import com.example.griffithsweather.interfaces.IDataManager;
 import com.example.griffithsweather.models.Weather;
 import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.webservices.JSONWeatherParser;
@@ -25,10 +26,10 @@ public class WeatherViewModel extends BaseObservable {
     private boolean isLoaded;
     private boolean isInternetAvailable;
     private int weatherImageResource;
-    private DataManager dataManager;
+    private IDataManager dataManager;
 
-    public WeatherViewModel() {
-        this.dataManager = new DataManager();
+    public WeatherViewModel(IDataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
     @Bindable
@@ -124,7 +125,8 @@ public class WeatherViewModel extends BaseObservable {
                 // convert to celsius
                 TemperatureConverter converter = new TemperatureConverter();
                 float currentTemperature = weather.temperature.getTemp();
-                String temperature = converter.KelvinToCelsius(currentTemperature);
+                String tmp = converter.KelvinToCelsius(currentTemperature);
+                String temperature = tmp.substring(0, tmp.indexOf("."));
 
                 // notify ui through bindings
                 setTemperature(temperature + (char) 0x00B0);

@@ -1,12 +1,14 @@
 package com.example.griffithsweather.utilities;
 
+import com.example.griffithsweather.interfaces.IDataManager;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DataManager {
+public class DataManager implements IDataManager {
 
     public String getCurrentData() {
         DateFormat df = new SimpleDateFormat("EEE, d MMM HH:mm:ss");

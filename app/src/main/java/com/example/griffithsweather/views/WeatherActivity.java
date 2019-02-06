@@ -12,7 +12,9 @@ import android.os.Bundle;
 
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.databinding.ActivityWeatherBinding;
+import com.example.griffithsweather.interfaces.IDataManager;
 import com.example.griffithsweather.interfaces.ILocator;
+import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.utilities.Locator;
 import com.example.griffithsweather.viewmodels.WeatherViewModel;
 import com.novoda.merlin.Merlin;
@@ -22,6 +24,7 @@ public class WeatherActivity extends AppCompatActivity {
     private static final int GPS_REQUEST_FINE_LOCATION_PERMISSION = 0;
     private WeatherViewModel viewModel;
     private ILocator locator;
+    private IDataManager dataManager;
     private String currentCity;
     private Merlin merlin;
 
@@ -48,6 +51,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         // creates dependencies
         this.locator = new Locator();
+        this.dataManager = new DataManager();
 
         // builds merlin which is external library
         // that observes internet connection and
@@ -55,7 +59,7 @@ public class WeatherActivity extends AppCompatActivity {
         buildMerlin();
 
         // setting up view-model with bindings
-        this.viewModel = new WeatherViewModel();
+        this.viewModel = new WeatherViewModel(dataManager);
         ActivityWeatherBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
         binding.setViewmodel(viewModel);
         binding.executePendingBindings();
@@ -69,7 +73,7 @@ public class WeatherActivity extends AppCompatActivity {
                 .build(this);
 
         merlin.registerConnectable(() -> {
-            viewModel.setIsInternetAvailable(true);
+            viewModel.setIsInternetAvailable(false);
             checkPermissions();
         });
 
@@ -80,10 +84,10 @@ public class WeatherActivity extends AppCompatActivity {
 
         merlin.registerBindable(networkStatus -> {
             if (networkStatus.isAvailable()) {
-                viewModel.setIsInternetAvailable(true);
+                viewModel.setIsInternetAvailable(false);
                 checkPermissions();
             } else {
-                viewModel.setIsInternetAvailable(false);
+                viewModel.setIsInternetAvailable(true);
             }
         });
     }
