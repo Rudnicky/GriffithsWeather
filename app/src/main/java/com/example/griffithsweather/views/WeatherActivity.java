@@ -15,6 +15,7 @@ import com.example.griffithsweather.databinding.ActivityWeatherBinding;
 import com.example.griffithsweather.interfaces.ILocator;
 import com.example.griffithsweather.utilities.Locator;
 import com.example.griffithsweather.viewmodels.WeatherViewModel;
+import com.novoda.merlin.Merlin;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class WeatherActivity extends AppCompatActivity {
     private WeatherViewModel viewModel;
     private ILocator locator;
     private String currentCity;
+    private Merlin merlin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +32,60 @@ public class WeatherActivity extends AppCompatActivity {
         setup();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        merlin.bind();
+    }
+
+    @Override
+    protected void onPause() {
+        merlin.unbind();
+        super.onPause();
+    }
+
     private void setup() {
+
+        // creates dependencies
+        this.locator = new Locator();
+
+        // builds merlin which is external library
+        // that observes internet connection and
+        // notify if anything has changed.
+        buildMerlin();
+
         // setting up view-model with bindings
         this.viewModel = new WeatherViewModel();
         ActivityWeatherBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
         binding.setViewmodel(viewModel);
         binding.executePendingBindings();
+    }
 
-        // creates an instance of Locator
-        locator = new Locator();
+    private void buildMerlin() {
+        merlin = new Merlin.Builder()
+                .withConnectableCallbacks()
+                .withDisconnectableCallbacks()
+                .withBindableCallbacks()
+                .build(this);
 
-        // UI controllers such as activities and fragments are primarily intended to display UI data,
-        // react to user actions, or handle operating system communication, such as permission requests,
-        // so as it shouldn't be placed on view-model side.
-        checkPermissions();
+        merlin.registerConnectable(() -> {
+            viewModel.setIsInternetAvailable(true);
+            checkPermissions();
+        });
+
+        merlin.registerDisconnectable(() -> {
+            // TODO: think about what needs to be done here, when there's a working app
+            // TODO: and somehow we've lost internet connection in the middle of nowhere.
+        });
+
+        merlin.registerBindable(networkStatus -> {
+            if (networkStatus.isAvailable()) {
+                viewModel.setIsInternetAvailable(true);
+                checkPermissions();
+            } else {
+                viewModel.setIsInternetAvailable(false);
+            }
+        });
     }
 
     private void checkPermissions() {

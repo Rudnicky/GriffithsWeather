@@ -240,5 +240,37 @@
             android:visibility="@{viewmodel.isLoaded ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="@+id/locationImageView"
             app:layout_constraintTop_toBottomOf="@+id/weatherImageView" />
+
+        <ImageView
+            android:id="@+id/sadCloudImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:visibility="@{viewmodel.isInternetAvailable ? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_sad_cloud" />
+
+        <TextView
+            android:id="@+id/sadCloudTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:fontFamily="@font/railway"
+            android:text="There's no internet connection. \nIn order to make this application\nwork, please turn ON your internet."
+            android:textColor="@android:color/background_light"
+            android:visibility="@{viewmodel.isInternetAvailable ? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sadCloudImageView" />
     </android.support.constraint.ConstraintLayout>
 </layout>
