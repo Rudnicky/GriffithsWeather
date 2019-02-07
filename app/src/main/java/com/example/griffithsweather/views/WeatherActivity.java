@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,16 @@ public class WeatherActivity extends AppCompatActivity implements IToastMessageL
     }
 
     @Override
+    protected  void onStart() {
+        super.onStart();
+
+        // builds merlin which is external library
+        // that observes internet connection and
+        // notify if anything has changed.
+        buildMerlin();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         merlin.bind();
@@ -79,11 +90,6 @@ public class WeatherActivity extends AppCompatActivity implements IToastMessageL
         this.viewModel = new WeatherViewModel(dataManager);
         this.viewModel.setIsProgressBarVisible(true);
         this.viewModel.setToastMessageListener(this);
-
-        // builds merlin which is external library
-        // that observes internet connection and
-        // notify if anything has changed.
-        buildMerlin();
 
         // setting up view-model with bindings
         ActivityWeatherBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_weather);
@@ -128,10 +134,14 @@ public class WeatherActivity extends AppCompatActivity implements IToastMessageL
                 this.isWeatherInitialized = true;
                 this.viewModel.setIsNetworkAvailable(true);
             } else {
-                this.viewModel.setIsNetworkAvailable(false);
-                this.viewModel.setIsSadCloudVisible(true);
-                this.viewModel.setIsProgressBarVisible(false);
-                this.isWeatherInitialized = false;
+                viewModel.setIsNetworkAvailable(false);
+
+                if (!viewModel.getIsLoaded()) {
+                    viewModel.setIsSadCloudVisible(true);
+                }
+
+                viewModel.setIsProgressBarVisible(false);
+                isWeatherInitialized = false;
             }
         });
     }
