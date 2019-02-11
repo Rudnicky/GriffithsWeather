@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 
 import com.example.griffithsweather.R;
 import com.example.griffithsweather.databinding.FragmentFiveDaysBinding;
-import com.example.griffithsweather.viewmodels.CityViewModel;
 import com.example.griffithsweather.viewmodels.FiveDaysViewModel;
 
 
-public class FiveDaysFragment extends Fragment {
+public class FiveDaysFragment extends BaseFragment {
 
     public FiveDaysFragment() {
         // Required empty public constructor
@@ -28,5 +27,10 @@ public class FiveDaysFragment extends Fragment {
         item.setTestString("Five Days");
         binding.setViewmodel(item);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onPermissionAllowed() {
+
     }
 }

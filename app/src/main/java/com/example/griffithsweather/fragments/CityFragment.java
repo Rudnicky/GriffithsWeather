@@ -2,7 +2,6 @@ package com.example.griffithsweather.fragments;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import com.example.griffithsweather.databinding.FragmentCityBinding;
 import com.example.griffithsweather.viewmodels.CityViewModel;
 
 
-public class CityFragment extends Fragment {
+public class CityFragment extends BaseFragment {
 
     public CityFragment() {
         // Required empty public constructor
@@ -27,5 +26,10 @@ public class CityFragment extends Fragment {
         item.setTestString("City");
         binding.setViewmodel(item);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onPermissionAllowed() {
+
     }
 }
