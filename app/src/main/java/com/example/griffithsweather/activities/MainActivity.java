@@ -3,9 +3,11 @@ package com.example.griffithsweather.activities;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,11 @@ import com.example.griffithsweather.fragments.BaseFragment;
 import com.example.griffithsweather.fragments.CityFragment;
 import com.example.griffithsweather.fragments.FiveDaysFragment;
 import com.example.griffithsweather.fragments.TodayFragment;
+import com.example.griffithsweather.interfaces.IDataManager;
+import com.example.griffithsweather.interfaces.ILocator;
+import com.example.griffithsweather.utilities.DataManager;
+import com.example.griffithsweather.utilities.Locator;
+import com.example.griffithsweather.viewmodels.TodayViewModel;
 
 import java.io.ObjectInputValidation;
 import java.util.ArrayList;
@@ -41,7 +48,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupTabLayout();
+    }
 
+    private void setupTabLayout() {
+
+        // Creates tab layout with viewpager
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -104,16 +116,20 @@ public class MainActivity extends AppCompatActivity {
 
             // notify each fragment about granted permission
             for (BaseFragment fragment : fragments) {
+
+                // class-specific code in order to pass current city
+                // context of this activity was needed.
+                if (fragment.getClass() == TodayFragment.class) {
+                    TodayFragment todayFragment = (TodayFragment)fragment;
+                    if (todayFragment != null) {
+                        ILocator locator = new Locator();
+                        String currentCity = locator.getCity(this);
+                        todayFragment.setCurrentCity(currentCity);
+                    }
+                }
+
                 fragment.onPermissionAllowed();
             }
-//            // obtain current city
-//            this.currentCity = locator.getCity(this);
-//
-//            // notify view-model and update ui
-//            viewModel.setCityName(this.currentCity);
-//
-//            // perform weather web-service call
-//            viewModel.getWeatherData();
         }
     }
 
@@ -125,22 +141,12 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-
-                    // TODO: this must be done in different way
+                    // permission was granted, yay!
                     // notify each fragment about granted permission
                     for (BaseFragment fragment : fragments) {
                         fragment.onPermissionAllowed();
                     }
 
-//                    // obtain current city
-//                    this.currentCity = locator.getCity(this);
-//
-//                    // notify view-model and update ui
-//                    viewModel.setCityName(this.currentCity);
-//
-//                    // perform weather web-service call
-//                    viewModel.getWeatherData();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
