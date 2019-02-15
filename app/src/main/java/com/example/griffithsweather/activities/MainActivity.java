@@ -24,6 +24,7 @@ import com.example.griffithsweather.interfaces.IDataManager;
 import com.example.griffithsweather.interfaces.ILocator;
 import com.example.griffithsweather.utilities.DataManager;
 import com.example.griffithsweather.utilities.Locator;
+import com.example.griffithsweather.viewmodels.FiveDaysViewModel;
 import com.example.griffithsweather.viewmodels.TodayViewModel;
 
 import java.io.ObjectInputValidation;
@@ -114,17 +115,24 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // Permission has already been granted
 
+            // get current city through locator
+            ILocator locator = new Locator();
+            String currentCity = locator.getCity(this);
+
             // notify each fragment about granted permission
             for (BaseFragment fragment : fragments) {
 
-                // class-specific code in order to pass current city
-                // context of this activity was needed.
                 if (fragment.getClass() == TodayFragment.class) {
                     TodayFragment todayFragment = (TodayFragment)fragment;
                     if (todayFragment != null) {
-                        ILocator locator = new Locator();
-                        String currentCity = locator.getCity(this);
                         todayFragment.setCurrentCity(currentCity);
+                    }
+                }
+
+                if (fragment.getClass() == FiveDaysFragment.class) {
+                    FiveDaysFragment fiveDaysFragment = (FiveDaysFragment)fragment;
+                    if (fiveDaysFragment != null) {
+                        fiveDaysFragment.setCurrentCity(currentCity);
                     }
                 }
 

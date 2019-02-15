@@ -1,11 +1,18 @@
 package com.example.griffithsweather.webservices;
 
+import com.example.griffithsweather.models.City;
+import com.example.griffithsweather.models.Coord;
+import com.example.griffithsweather.models.Forecast;
 import com.example.griffithsweather.models.Location;
 import com.example.griffithsweather.models.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONWeatherParser {
     public static Weather getWeather(String data) throws JSONException  {
@@ -60,6 +67,67 @@ public class JSONWeatherParser {
         return weather;
     }
 
+    // https://openweathermap.org/forecast5
+    public static Forecast getForecast(String data) throws JSONException  {
+
+        Forecast forecast = new Forecast();
+
+        // We create out JSONObject from the data
+        JSONObject jObj = new JSONObject(data);
+        JSONObject cityObj = getObject("city", jObj);
+        JSONObject coordObj = getObject("coord", cityObj);
+        JSONArray listArray = jObj.getJSONArray("list");
+
+        // get coordinates
+        Coord coord = new Coord();
+        coord.setLat(getFloat("lat", coordObj));
+        coord.setLon(getFloat("lon", coordObj));
+
+        // get current city
+        City city = new City();
+        city.setId(getFloat("id", cityObj));
+        city.setName(getString("name", cityObj));
+        city.setCountry(getString("country", cityObj));
+        city.setPopulation(getFloat("population", cityObj));
+        city.setCoord(coord);
+
+        // iterate through forecast list in order
+        // to obtain forecast for next five days
+        // there's plenty of elements but only because
+        // the forecast has been updated every each 3 hours.
+        ArrayList<Object> listOfObjects = new ArrayList<>();
+        for (int i=0; i<listArray.length(); i++)
+        {
+            Weather weather = new Weather();
+            JSONObject mainObj = getObject("main", listArray.getJSONObject(i));
+            weather.currentCondition.setHumidity(getInt("humidity", mainObj));
+            weather.currentCondition.setPressure(getInt("pressure", mainObj));
+            weather.temperature.setMaxTemp(getFloat("temp_max", mainObj));
+            weather.temperature.setMinTemp(getFloat("temp_min", mainObj));
+            weather.temperature.setTemp(getFloat("temp", mainObj));
+
+            // Wind
+            JSONObject wObj = getObject("wind", listArray.getJSONObject(i));
+            weather.wind.setSpeed(getFloat("speed", wObj));
+            weather.wind.setDeg(getFloat("deg", wObj));
+
+            // Clouds
+            JSONObject cObj = getObject("clouds", listArray.getJSONObject(i));
+            weather.clouds.setPerc(getInt("all", cObj));
+
+            // Data
+            String dObj = getString("dt_txt", listArray.getJSONObject(i));
+            weather.setDate(dObj);
+
+            // Add item to the list
+            listOfObjects.add(weather);
+        }
+
+        forecast.setCity(city);
+        forecast.setList(listOfObjects);
+
+        return forecast;
+    }
 
     private static JSONObject getObject(String tagName, JSONObject jObj)  throws JSONException {
         JSONObject subObj = jObj.getJSONObject(tagName);

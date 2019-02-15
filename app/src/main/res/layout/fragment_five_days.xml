@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <import type="android.view.View" />
@@ -7,15 +8,213 @@
             name="viewmodel"
             type="com.example.griffithsweather.viewmodels.FiveDaysViewModel" />
     </data>
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.FiveDaysFragment">
+        android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@{viewmodel.testString}" />
+            android:id="@+id/CityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:text="@{viewmodel.city}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+        <TextView
+            android:id="@+id/LastTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Last:"
+            app:layout_constraintEnd_toStartOf="@+id/CityTextView"
+            app:layout_constraintTop_toBottomOf="@+id/CityTextView" />
+
+        <TextView
+            android:id="@+id/CurrentDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="@{viewmodel.lastUpdate}"
+            app:layout_constraintStart_toEndOf="@+id/LastTextView"
+            app:layout_constraintTop_toTopOf="@+id/LastTextView" />
+
+        <ImageView
+            android:id="@+id/RefreshImageView"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toEndOf="@+id/CurrentDataTextView"
+            app:layout_constraintTop_toTopOf="@+id/CurrentDataTextView"
+            app:srcCompat="@drawable/img_refresh" />
+
+        <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="8dp"
+            android:stretchColumns="*"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/RefreshImageView">
+
+            <!-- FIRST ROW (specific hours) -->
+            <TableRow
+                android:id="@+id/firstRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/emptyColumn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway"
+                    android:text=""
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway"
+                    android:text="06:00"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway"
+                    android:text="12:00"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/raleway"
+                    android:text="18:00"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="12sp" />
+            </TableRow>
+
+            <!-- SECOND ROW (DAY - 1) -->
+            <TableRow
+                android:id="@+id/secondRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:text="12.02"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- THIRD ROW (DAY - 2) -->
+            <TableRow
+                android:id="@+id/thirdRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:text="13.02"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- FOURTH ROW (DAY - 3) -->
+            <TableRow
+                android:id="@+id/fourthRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:text="14.02"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- FIFTH ROW (DAY - 4) -->
+            <TableRow
+                android:id="@+id/fifthRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:text="15.02"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- SIXTH ROW (DAY - 5) -->
+            <TableRow
+                android:id="@+id/sixthRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:text="16.02"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="16sp" />
+            </TableRow>
+
+            <!-- EMPTY ROW -->
+            <TableRow
+                android:id="@+id/lastEmptyRow"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="10sp" />
+            </TableRow>
+
+        </TableLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>

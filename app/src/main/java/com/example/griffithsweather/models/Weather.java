@@ -9,6 +9,15 @@ public class Weather {
     public Rain rain = new Rain();
     public Snow snow = new Snow()	;
     public Clouds clouds = new Clouds();
+    public String date;
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
 
     public byte[] iconData;
 }
