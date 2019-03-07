@@ -151,6 +151,29 @@ public class MainActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay!
                     // notify each fragment about granted permission
+
+                    // get current city through locator
+                    ILocator locator = new Locator();
+                    String currentCity = locator.getCity(this);
+
+                    // notify each fragment about granted permission
+                    for (BaseFragment fragment : fragments) {
+
+                        if (fragment.getClass() == TodayFragment.class) {
+                            TodayFragment todayFragment = (TodayFragment)fragment;
+                            if (todayFragment != null) {
+                                todayFragment.setCurrentCity(currentCity);
+                            }
+                        }
+
+                        if (fragment.getClass() == FiveDaysFragment.class) {
+                            FiveDaysFragment fiveDaysFragment = (FiveDaysFragment)fragment;
+                            if (fiveDaysFragment != null) {
+                                fiveDaysFragment.setCurrentCity(currentCity);
+                            }
+                        }
+                    }
+
                     for (BaseFragment fragment : fragments) {
                         fragment.onPermissionAllowed();
                     }
